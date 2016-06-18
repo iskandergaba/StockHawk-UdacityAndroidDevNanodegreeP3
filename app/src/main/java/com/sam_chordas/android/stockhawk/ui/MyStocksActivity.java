@@ -49,6 +49,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
      */
     private CharSequence mTitle;
     private Intent mServiceIntent;
+    Intent mHistoryServiceIntent;
     private ItemTouchHelper mItemTouchHelper;
     private static final int CURSOR_LOADER_ID = 0;
     private QuoteCursorAdapter mCursorAdapter;
@@ -70,16 +71,19 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         // The intent service is for executing immediate pulls from the Yahoo API
         // GCMTaskService can only schedule tasks, they cannot execute immediately
         mServiceIntent = new Intent(this, StockIntentService.class);
+        mHistoryServiceIntent = new Intent(this, StocksHistoryService.class);
         if (savedInstanceState == null){
             // Run the initialize task service so that some stocks appear upon an empty database
             mServiceIntent.putExtra("tag", "init");
+            mHistoryServiceIntent.putExtra("tag", "init");
             if (isConnected){
                 startService(mServiceIntent);
+                startService(mHistoryServiceIntent);
             } else{
                 networkToast();
             }
         }
-        startService(new Intent (this, StocksHistoryService.class));
+
         StocksRecyclerView recyclerView = (StocksRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
@@ -121,7 +125,10 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                         // Add the stock to DB
                                         mServiceIntent.putExtra("tag", "add");
                                         mServiceIntent.putExtra("symbol", input.toString());
+                                        mHistoryServiceIntent.putExtra("tag", "add");
+                                        mHistoryServiceIntent.putExtra("symbol", input.toString());
                                         startService(mServiceIntent);
+                                        startService(mHistoryServiceIntent);
                                     }
                                 }
                             })

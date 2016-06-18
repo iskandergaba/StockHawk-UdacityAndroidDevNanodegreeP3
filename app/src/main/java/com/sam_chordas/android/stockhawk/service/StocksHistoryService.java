@@ -81,36 +81,41 @@ public class StocksHistoryService extends IntentService {
         urlStringBuilder.append(BASE_URL);
         urlStringBuilder.append("select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20in%20(");
 
-        initQueryCursor = mContext.getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
-                new String[]{"Distinct " + QuoteColumns.SYMBOL}, null,
-                null, null);
-        if (initQueryCursor == null || initQueryCursor.getCount() == 0) {
-            // Init task. Populates DB with quotes for the symbols seen below
-            try {
-                urlStringBuilder.append(
-                        URLEncoder.encode("\"YHOO\",\"AAPL\",\"GOOG\",\"MSFT\")", "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+        if (intent.getStringExtra("tag").equals("init")) {
+            initQueryCursor = mContext.getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
+                    new String[]{"Distinct " + QuoteColumns.SYMBOL}, null,
+                    null, null);
+            if (initQueryCursor == null || initQueryCursor.getCount() == 0) {
+                // Init task. Populates DB with quotes for the symbols seen below
+                try {
+                    urlStringBuilder.append(
+                            URLEncoder.encode("\"YHOO\",\"AAPL\",\"GOOG\",\"MSFT\")", "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                DatabaseUtils.dumpCursor(initQueryCursor);
+                initQueryCursor.moveToFirst();
+                for (int i = 0; i < initQueryCursor.getCount(); i++) {
+                    mStoredSymbols.append("%20%22")
+                            .append(initQueryCursor.getString(initQueryCursor.getColumnIndex("symbol")))
+                            .append("%22,");
+                    initQueryCursor.moveToNext();
+                }
+                mStoredSymbols.replace(mStoredSymbols.length() - 1, mStoredSymbols.length(), ")");
+                urlStringBuilder.append(mStoredSymbols);
             }
-        } else {
-            DatabaseUtils.dumpCursor(initQueryCursor);
-            initQueryCursor.moveToFirst();
-            for (int i = 0; i < initQueryCursor.getCount(); i++) {
-                mStoredSymbols.append("%20%22")
-                        .append(initQueryCursor.getString(initQueryCursor.getColumnIndex("symbol")))
-                        .append("%22,");
-                initQueryCursor.moveToNext();
-            }
-            mStoredSymbols.replace(mStoredSymbols.length() - 1, mStoredSymbols.length(), ")");
-            urlStringBuilder.append(mStoredSymbols);
-
+        }
+        else if (intent.getStringExtra("tag").equals("add")) {
+            String stockInput = intent.getStringExtra("symbol");
+            urlStringBuilder.append("%22").append(stockInput).append("%22)");
         }
 
         urlStringBuilder.append("%20and%20startDate%20=%20%22").append(startDate).append("%22%20and%20endDate%20=%20%22")
                 .append(endDate).append("%22&format=json&env=store://datatables.org/alltableswithkeys");
 
         String urlString;
-        String getResponse;
+        String getResponse = null;
         int result = GcmNetworkManager.RESULT_FAILURE;
 
         urlString = urlStringBuilder.toString();
