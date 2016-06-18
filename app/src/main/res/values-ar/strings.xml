@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Stock Hawk</string>
+
+    <string name="action_settings">إعدادات</string>
+    <string name="action_change_units">تغيير الوحدات</string>
+    <string name="content_test">إبحث عن رمز سند</string>
+    <string name="input_hint">FB</string>
+    <string name="network_toast">أوه لا! التطبيق يحتاج إلى الإتصال بشبكة الإنترنت</string>
+    <string name="empty_stock_list">إضغط على الزر (+) لإضافة سند</string>
+    <string name="network_unavailable">لا يوجد إتصال بالشبكة</string>
+    <string name="symbol_search">بحث رمزي</string>
+    <string name="action_add_stock">إضافة سند</string>
+</resources>
