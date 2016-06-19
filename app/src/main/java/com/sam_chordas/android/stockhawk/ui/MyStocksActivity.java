@@ -50,11 +50,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     private CharSequence mTitle;
     private Intent mServiceIntent;
     Intent mHistoryServiceIntent;
-    private ItemTouchHelper mItemTouchHelper;
     private static final int CURSOR_LOADER_ID = 0;
     private QuoteCursorAdapter mCursorAdapter;
     private Context mContext;
-    private Cursor mCursor;
     public static boolean isConnected;
 
     @Override
@@ -85,22 +83,24 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         }
 
         StocksRecyclerView recyclerView = (StocksRecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
-
-        mCursorAdapter = new QuoteCursorAdapter(this, null);
-        recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
-                new RecyclerViewItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View v, int position) {
-                        //TODO:
-                        // do something on item click
-                    }
-                }));
-        TextView emptyView = (TextView) findViewById(R.id.empty_view);
-        recyclerView.setAdapter(mCursorAdapter);
-        recyclerView.setEmptyView(emptyView);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+        mCursorAdapter = new QuoteCursorAdapter(this, null);
+        if (recyclerView != null) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
+                    new RecyclerViewItemClickListener.OnItemClickListener() {
+                        @Override public void onItemClick(View v, int position) {
+                            Intent historyIntent = new Intent(v.getContext(), StockHistoryActivity.class);
+                            historyIntent.putExtra(StockHistoryActivity.ARG_SYMBOL, mCursorAdapter.getSymbol(position));
+                            startActivity(historyIntent);
+                        }
+                    }));
+            TextView emptyView = (TextView) findViewById(R.id.empty_view);
+            recyclerView.setAdapter(mCursorAdapter);
+            recyclerView.setEmptyView(emptyView);
+        }
+
         fab.attachToRecyclerView(recyclerView);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -115,7 +115,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                     Cursor c = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
                                             new String[] { QuoteColumns.SYMBOL }, QuoteColumns.SYMBOL + "= ?",
                                             new String[] { input.toString() }, null);
-                                    if (c.getCount() != 0) {
+                                    if (c != null && c.getCount() != 0) {
                                         Toast toast =
                                                 Toast.makeText(MyStocksActivity.this, "This stock is already saved!",
                                                         Toast.LENGTH_LONG);
@@ -141,7 +141,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         });
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mCursorAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recyclerView);
 
         mTitle = getTitle();
@@ -179,9 +179,12 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        if (actionBar != null) {
+            //noinspection deprecation
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(mTitle);
+        }
     }
 
     @Override
@@ -226,12 +229,10 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data){
         mCursorAdapter.swapCursor(data);
-        mCursor = data;
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader){
         mCursorAdapter.swapCursor(null);
     }
-
 }

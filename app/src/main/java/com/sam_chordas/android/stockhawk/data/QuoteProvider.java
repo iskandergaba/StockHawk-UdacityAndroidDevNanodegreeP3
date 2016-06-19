@@ -37,7 +37,7 @@ public class QuoteProvider {
         @InexactContentUri(
                 name = "QUOTE_ID",
                 path = Path.QUOTES + "/*",
-                type = "vnd.android.cursor.item/quote_history",
+                type = "vnd.android.cursor.item/quote",
                 whereColumn = QuoteColumns.SYMBOL,
                 pathSegment = 1
         )
@@ -50,8 +50,7 @@ public class QuoteProvider {
     public static class QuotesHistory{
         @ContentUri(
                 path = Path.QUOTES_HISTORY,
-                type = "vnd.android.cursor.dir/quote",
-                defaultSort = QuoteHistoryColumns.DATE + " ASC"
+                type = "vnd.android.cursor.dir/quote_history"
         )
         public static final Uri CONTENT_URI = buildUri(Path.QUOTES_HISTORY);
     }

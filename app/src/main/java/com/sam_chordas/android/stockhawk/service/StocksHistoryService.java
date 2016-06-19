@@ -9,7 +9,6 @@ import android.database.DatabaseUtils;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GcmNetworkManager;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteDatabase;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
@@ -65,12 +64,16 @@ public class StocksHistoryService extends IntentService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         String startDate;
-        if (cal.get(Calendar.MONTH) > 6) {
-            startDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) - 6) +
-                    "-" + cal.get(Calendar.DAY_OF_MONTH);
-        } else {
-            startDate = (cal.get(Calendar.YEAR) - 1) + "-" + (cal.get(Calendar.MONTH) + 7) +
+        if (cal.get(Calendar.MONTH) > 0) {
+            startDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH)) +
                     "-" + (cal.get(Calendar.DAY_OF_MONTH) - 1);
+        }
+        else if (cal.get(Calendar.MONTH) == 2) {
+            startDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH)) +
+                    "-" + (cal.get(Calendar.DAY_OF_MONTH) - 3);
+        } else {
+            startDate = (cal.get(Calendar.YEAR) - 1) + "-" + 12 +
+                    "-" + (cal.get(Calendar.DAY_OF_MONTH) - 2);
         }
 
         String endDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1)+
@@ -115,16 +118,19 @@ public class StocksHistoryService extends IntentService {
                 .append(endDate).append("%22&format=json&env=store://datatables.org/alltableswithkeys");
 
         String urlString;
-        String getResponse = null;
-        int result = GcmNetworkManager.RESULT_FAILURE;
+        String getResponse;
 
         urlString = urlStringBuilder.toString();
         try{
             getResponse = fetchData(urlString);
-            result = GcmNetworkManager.RESULT_SUCCESS;
             try {
-                mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
-                        Utils.quoteJsonToContentVals(getResponse, QuoteDatabase.QUOTES_HISTORY));
+                if (getResponse != null) {
+                    if (intent.getStringExtra("tag").equals("init")) {
+                        mContext.getContentResolver().delete(QuoteProvider.QuotesHistory.CONTENT_URI, null, null);
+                    }
+                    mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
+                            Utils.quoteJsonToContentVals(getResponse, QuoteDatabase.QUOTES_HISTORY));
+                }
             }catch (RemoteException | OperationApplicationException e){
                 Log.e("error", "Error applying batch insert", e);
             }

@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +82,12 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
 
     @Override public int getItemCount() {
         return super.getItemCount();
+    }
+
+    public String getSymbol(int position) {
+        Cursor c = getCursor();
+        c.moveToPosition(position);
+        return c.getString(c.getColumnIndex(QuoteColumns.SYMBOL));
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder
