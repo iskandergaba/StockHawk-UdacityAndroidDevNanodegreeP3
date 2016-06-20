@@ -16,10 +16,11 @@
     <string name="symbol_search">Symbol Search</string>
     <string name="content_test">Search for a Stock Symbol</string>
 
-    <!--Appear when starting the app with no connectivity-->
+    <!--Toast messages-->
     <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+    <string name="existing_stock_toast">"This stock is already saved!</string>
 
-    <!--Error messages that appear when the list of stocks is empty-->
+    <!--Messages that appear when the list of stocks is empty-->
     <string name="network_unavailable">Network connection unavailable</string>
     <string name="empty_stock_list">Tap on the (+) button to add a stock</string>
 

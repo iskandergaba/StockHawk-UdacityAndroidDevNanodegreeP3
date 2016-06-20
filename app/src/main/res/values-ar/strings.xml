@@ -16,4 +16,5 @@
     <string name="title_activity_stock_history">تاريخ السند</string>
     <string name="unknown_stock">سند غير معروف</string>
     <string name="widget_no_data">لا توجد بيانات للعرض</string>
+    <string name="existing_stock_toast">تم حفظ هذا السند مسبقا!</string>
 </resources>
