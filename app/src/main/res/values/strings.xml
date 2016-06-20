@@ -22,11 +22,17 @@
     <!--Error messages that appear when the list of stocks is empty-->
     <string name="network_unavailable">Network connection unavailable</string>
     <string name="empty_stock_list">Tap on the (+) button to add a stock</string>
-    <string name="title_activity_stock_detail">Details</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_my_stock_detail">MyStockDetailActivity</string>
-    <string name="title_activity_my_stock_history">Stock History</string>
+
+
+    <!--StockHistoryActivity strings-->
     <string name="title_activity_stock_history">Stock History</string>
+    <string name="unknown_stock">Unknown Stock</string>
+    <string name="week">1 Week</string>
+    <string name="two_weeks">2 Weeks</string>
+    <string name="month">1 Month</string>
+
+    <!--Widget strings-->
+    <string name="widget_no_data">No available data to show</string>
 
 
 </resources>

@@ -56,7 +56,7 @@ public class Utils {
         if (!bidPrice.equals("null")) {
             bidPrice = String.format("%.2f", Float.parseFloat(bidPrice));
         } else {
-            bidPrice = "Not found";
+            bidPrice = "N/A";
         }
         return bidPrice;
     }

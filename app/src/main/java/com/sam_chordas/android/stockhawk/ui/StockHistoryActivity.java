@@ -72,9 +72,9 @@ public class StockHistoryActivity extends AppCompatActivity
                             android.R.layout.simple_list_item_1,
                             android.R.id.text1,
                             new String[]{
-                                    "1 Week",
-                                    "2 Weeks",
-                                    "1 Month"
+                                    getString(R.string.week),
+                                    getString(R.string.two_weeks),
+                                    getString(R.string.month)
                             }),
                     this);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -100,8 +100,8 @@ public class StockHistoryActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         editor.putInt(STATE_PREF_NAVIGATION_ITEM, getSupportActionBar().getSelectedNavigationIndex());
         editor.apply();
@@ -208,7 +208,7 @@ public class StockHistoryActivity extends AppCompatActivity
                 String symbol = data.getString(data.getColumnIndex(QuoteColumns.SYMBOL)).toUpperCase();
                 String name = data.getString(data.getColumnIndex(QuoteColumns.NAME));
                 if (name.equals("null")) {
-                    name = "Unknown Stock";
+                    name = getString(R.string.unknown_stock);
                 }
                 //noinspection EqualsBetweenInconvertibleTypes
                 if (!mNameTextView.equals(name) || !mSymbolTextView.equals(symbol)) {

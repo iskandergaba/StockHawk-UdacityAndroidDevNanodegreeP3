@@ -38,11 +38,13 @@
         </service>
         <service android:name=".service.StockIntentService" />
         <service android:name=".service.StocksHistoryService" />
+        <service android:name=".service.WidgetRemoteViewsService"
+        android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <provider
             android:name=".data.generated.QuoteProvider"
             android:authorities="com.sam_chordas.android.stockhawk.data.QuoteProvider"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity
             android:name=".ui.StockHistoryActivity"
@@ -52,6 +54,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sam_chordas.android.stockhawk.ui.MyStocksActivity" />
         </activity>
+
+        <receiver android:name=".ui.StockHawkWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/stock_hawk_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

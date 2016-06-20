@@ -10,4 +10,10 @@
     <string name="network_unavailable">لا يوجد إتصال بالشبكة</string>
     <string name="symbol_search">بحث رمزي</string>
     <string name="action_add_stock">إضافة سند</string>
+    <string name="month">شهر</string>
+    <string name="two_weeks">أسبوعان</string>
+    <string name="week">أسبوع</string>
+    <string name="title_activity_stock_history">تاريخ السند</string>
+    <string name="unknown_stock">سند غير معروف</string>
+    <string name="widget_no_data">لا توجد بيانات للعرض</string>
 </resources>

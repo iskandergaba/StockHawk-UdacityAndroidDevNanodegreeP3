@@ -84,7 +84,7 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
         return super.getItemCount();
     }
 
-    public String getSymbol(int position) {
+    public static String getSymbol(int position) {
         Cursor c = getCursor();
         c.moveToPosition(position);
         return c.getString(c.getColumnIndex(QuoteColumns.SYMBOL));
