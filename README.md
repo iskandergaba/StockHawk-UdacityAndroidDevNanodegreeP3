@@ -7,10 +7,29 @@ This will involve finding and handling error cases, adding accessibility feature
 adding a widget, and adding a library. 
 
 ##Why this Project?
+Stock Hawk gives you an opportunity to diagnose problems and practice improving apps. These skills are vital to building apps users will love.
+
+Diagnosing issues with existing apps is key to working on large apps or continuing projects in Android. Being aware of the common pitfalls in app design frees a developer to produce novel app experiences without making the same mistakes over and over. 
 
 ##What Will I Learn?
+In this project, you will:
+
+    Diagnose existing issues with an app.
+    Make an app accessible to sight-impaired users.
+    Allow your app to be localized for distribution in other countries.
+    Handle error cases in Android.
+    Add a widget to your app experience.
+    Leverage the functionality of a library in your app.
 
 ##How Will I Complete this Project?
+
+You will improve the Stock Hawk app for this project.
+
+You can download the starting code for Stock Hawk from the Stock Hawk repository on GitHub. The app currently finds stock prices from the internet and allows users to add stocks to track.
+
+Your job will be to take the user feedback in the UX Review and implement changes that will make the app production ready.
+
+All of the issues you need to address to meet specifications are hinted at in the UX Review. There are also a few optional ways in which the apps can be improved that are not mentioned in the UX Review.
 
 ##User Feedback for Stock Hawk (All fixed):
 ###Hellen says:
